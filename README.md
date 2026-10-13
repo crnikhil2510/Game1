@@ -2,7 +2,11 @@
 
 Football story-game prototype: choices, training, relationships, four schools and simplified 11v11 matches.
 
-## Play on Windows
+## Play the new walkable pixel game
+
+Open `pixel_game/index.html` in your browser (or VS Code Live Server). Explore 13 connected maps from home to city, school interiors and the football ground. Episode 1 includes dialogue choices, trial club membership, passing training and browser save/load. No install required.
+
+## Play the original prototype on Windows
 
 Install Python 3 with tkinter. Download this repository as a ZIP and extract it. Open `football_story` and double-click `Start_Windows.bat`. The launcher installs Pillow.
 
