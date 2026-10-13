@@ -4,6 +4,7 @@ g.imageSmoothingEnabled=false;
 let state=E.fresh(),dialog=null,di=0,drill=null,keys=new Set(),lastMove=0,toast='',toastUntil=0;
 const $=id=>document.getElementById(id);
 const portraits={};
+const bedroomArt=new Image();bedroomArt.src='../art/Hachiman_Bedroom.jpg';
 for(const name of ['Hachiman','Kaito','Yukino','Kei','Hiyori']){const im=new Image();im.src='../art/'+name+'_Expressions.jpg';portraits[name]=im;}
 const palettes={wood:['#ba9270','#ac8262','#534f5b'],tile:['#ded5b4','#d3c9a5','#666d73'],town:['#bcc4a0','#b0b990','#597448'],garden:['#b8c09a','#aeb68c','#6b7f50'],grass:['#51915b','#4a8755','#3c714a']};
 function rect(x,y,w,h,color){g.fillStyle=color;g.fillRect(Math.round(x),Math.round(y),w,h);}
@@ -25,6 +26,9 @@ function sprite(x,y,name,walking=false){
 }
 function draw(){
  const m=E.maps[state.map],pal=palettes[m.type];g.clearRect(0,0,c.width,c.height);
+ const illustrated=m.id==='bedroom'&&bedroomArt.complete&&bedroomArt.naturalWidth>0;
+ if(illustrated)g.drawImage(bedroomArt,0,0,c.width,c.height);
+ if(!illustrated){
  for(let y=0;y<E.H;y++)for(let x=0;x<E.W;x++){
   const a=x*T,b=y*T,t=m.grid[y][x];rect(a,b,T,T,pal[(x+y)%2]);
   if(m.type==='wood'){rect(a,b+22,T,1,'#9d745758');rect(a+((y%2)*10),b,1,22,'#9d745758');}
@@ -39,12 +43,13 @@ function draw(){
   if(t==='F'){rect(a+2,b+4,20,18,'#544d4d');rect(a+1,b+1,22,17,'#9c7550');rect(a+3,b+3,18,3,'#c29a69');rect(a+5,b+8,13,1,'#715d4d');}
   if(t==='T'){rect(a+10,b+11,5,13,'#795a41');rect(a+2,b+2,20,17,'#456e47');rect(a+4,b,16,16,'#dc9cad');rect(a+2,b+5,20,7,'#ecb4bc');rect(a+8,b+3,3,3,'#ffd4d2');}
  }
+ }
  if(m.type==='grass'){
   g.strokeStyle='#d1e2bc';g.lineWidth=2;g.strokeRect(45,48,483,239);g.beginPath();g.moveTo(286,48);g.lineTo(286,287);g.stroke();
   g.beginPath();g.arc(286,168,37,0,Math.PI*2);g.stroke();g.strokeRect(45,118,63,99);g.strokeRect(465,118,63,99);g.strokeRect(31,140,14,55);g.strokeRect(528,140,14,55);
  }
- for(const p of m.portals){rect(p.x*T+1,p.y*T+1,22,22,'#d9b86b');rect(p.x*T+6,p.y*T+7,12,3,'#5b6454');rect(p.x*T+10,p.y*T+4,4,12,'#5b6454');text(p.label,Math.min(440,Math.max(8,p.x*T-18)),Math.max(12,p.y*T-5),'#172d37',9);}
- for(const o of m.objects){rect(o.x*T+5,o.y*T+5,14,10,o.kind==='training'?'#f5eee0':'#d5bf86');text(o.kind==='training'?'o':'?',o.x*T+8,o.y*T+14,'#32465b',9);}
+ for(const p of m.portals){if(illustrated){rect(p.x*T+3,p.y*T+12,18,2,'#e8c982');continue;}rect(p.x*T+1,p.y*T+1,22,22,'#d9b86b');rect(p.x*T+6,p.y*T+7,12,3,'#5b6454');rect(p.x*T+10,p.y*T+4,4,12,'#5b6454');text(p.label,Math.min(440,Math.max(8,p.x*T-18)),Math.max(12,p.y*T-5),'#172d37',9);}
+ if(!illustrated)for(const o of m.objects){rect(o.x*T+5,o.y*T+5,14,10,o.kind==='training'?'#f5eee0':'#d5bf86');text(o.kind==='training'?'o':'?',o.x*T+8,o.y*T+14,'#32465b',9);}
  const actors=[...m.npcs,{x:state.x,y:state.y,name:'Hachiman',player:true}].sort((a,b)=>a.y-b.y);
  for(const n of actors){sprite(n.x,n.y,n.name,n.player&&keys.size>0&&!dialog&&!drill);if(!n.player)text(n.name,n.x*T-5,n.y*T-7,'#172d37');}
  const n=E.nearby(state);if(n&&!dialog&&!drill){rect(7,353,Math.min(560,(n.name||n.label).length*7+112),24,'#142b3bdc');text('E · '+(n.name||n.label),16,369,'#f4d698',12);}

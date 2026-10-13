@@ -11,3 +11,5 @@ Walk onto a gold doorway to change maps. Begin in Hachiman's bedroom, go downsta
 Save/load uses this browser's local storage. Switching browser or URL may use a different save. This is a pixel prototype with procedural art and existing portrait references, not a finished commercial RPG. NPCs stay at scripted locations; full schedules, later chapters, commercial-quality tiles, actual GBA ROM output, and full 11v11 football physics remain future work.
 
 Run logic tests from the repository root: node pixel_game/test_engine.js
+
+The starting bedroom now uses the illustrated room background, with a movable Hachiman sprite and collision cells aligned to the furniture. Other areas retain the original procedural graphics.

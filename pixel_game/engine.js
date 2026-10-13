@@ -8,9 +8,16 @@ function obj(m,x,y,label,kind,lines){m.objects.push({x,y,label,kind,lines});m.gr
 function door(m,x,y,to,tx,ty,label){m.grid[y][x]='.';m.portals.push({x,y,to,tx,ty,label});}
 function npc(m,x,y,name){m.npcs.push({x,y,name});}
 const bed=room('bedroom',"Hachiman's bedroom",'wood');
-obj(bed,3,3,'Bed','rest',['One more minute would be nice.','But it is the first day of school.']);
-block(bed,3,4,3,2,'F');obj(bed,17,3,'Desk','desk',['Three promises: decent grades, quiet lunches, no football.','My notebook makes that sound easy.']);
-obj(bed,18,9,'Bookshelf','book',['Some stories are easier to return to than others.']);
+// Collision cells follow the illustrated bedroom's visible floor and furniture.
+for(let y=0;y<H;y++)for(let x=0;x<W;x++)bed.grid[y][x]='#';
+for(let y=6;y<=11;y++)for(let x=7;x<=20;x++)bed.grid[y][x]='.';
+for(let y=10;y<=11;y++)for(let x=4;x<=20;x++)bed.grid[y][x]='.';
+for(let x=3;x<=20;x++)bed.grid[12][x]='.';
+for(let y=13;y<H;y++)for(let x=11;x<=13;x++)bed.grid[y][x]='.';
+block(bed,10,6,2,1,'F');
+obj(bed,6,8,'Bed','rest',['One more minute would be nice.','But it is the first day of school.']);
+obj(bed,13,5,'Desk','desk',['Three promises: decent grades, quiet lunches, no football.','My notebook makes that sound easy.']);
+obj(bed,18,5,'Bookshelf','book',['Some stories are easier to return to than others.']);
 door(bed,12,15,'living',12,2,'Downstairs');
 const living=room('living','Home · living room','wood');
 block(living,4,5,4,2,'F');obj(living,5,4,'Breakfast','food',['Breakfast before another perfectly ordinary day.']);
